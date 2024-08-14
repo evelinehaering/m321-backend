@@ -2,6 +2,7 @@ const express = require('express');
 const axios = require('axios');
 
 const app = express();
+let counter = 0;
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
@@ -25,6 +26,6 @@ app.get('/counter', (req, res) => {
 });
 
 
-app.listen(3000, async () => {
+app.listen(3002, async () => {
     console.log('Server running on port 3002')
 });
