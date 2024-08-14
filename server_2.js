@@ -2,7 +2,7 @@ const express = require('express');
 const axios = require('axios');
 
 const app = express();
-let counter = 0;
+var counter = 0;
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
@@ -18,6 +18,7 @@ app.use((req, res, next) => {
 app.use(express.json());
 
 app.post('/increment', async (req, res) => {
+    counter++;
     res.send(`Counter incremented to ${counter}`);
 });
 
