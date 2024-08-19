@@ -18,12 +18,29 @@ app.use((req, res, next) => {
 app.use(express.json());
 
 app.post('/increment', async (req, res) => {
+    const serverName = 'server1';
+    const originServers = req.headers['x-origin-servers']?.split(',') || [];
+
+    if (originServers.includes(serverName)) {
+        console.log(`${serverName} - Request denied: Origin server is the same`);
+        return res.json({ counter });
+    }
+
     counter++;
-    res.send(`Counter incremented to ${counter}`);
+    res.json({ counter });
+
+    originServers.push(serverName);
+    const headers = { 'x-origin-servers': originServers.join(',') };
+
+    try {
+        await axios.post('http://localhost:3001/increment', null, { headers });
+    } catch (error) {
+        console.error(`${serverName} - Error forwarding request: `, error.message);
+    }
 });
 
 app.get('/counter', (req, res) => {
-    res.json({ counter });
+    res.send({ counter });
 });
 
 

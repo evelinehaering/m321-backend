@@ -23,7 +23,7 @@ app.post('/increment', async (req, res) => {
 });
 
 app.get('/counter', (req, res) => {
-    res.json({ counter });
+    res.send({ counter });
 });
 
 
