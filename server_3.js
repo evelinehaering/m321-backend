@@ -39,7 +39,7 @@ app.post('/increment', async (req, res) => {
     }
 });
 
-app.get('/counter', (req, res) => {
+app.get('/count', (req, res) => {
     res.send({ counter });
 });
 
