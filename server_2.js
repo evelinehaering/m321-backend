@@ -1,48 +1,8 @@
-const express = require('express');
-const axios = require('axios');
+const createServer = require('./logic');
 
-const app = express();
-var counter = 0;
-app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+const port = 3001;
+const serverName = 'server2';
+const nextServerUrl = 'http://localhost:3002/increment';
+const otherServers = ['http://localhost:3000', 'http://localhost:3002'];
 
-    if (req.method === 'OPTIONS') {
-        return res.sendStatus(200);
-    }
-
-    next();
-});
-
-app.use(express.json());
-
-app.post('/increment', async (req, res) => {
-    const serverName = 'server2';
-    const originServers = req.headers['x-origin-servers']?.split(',') || [];
-
-    if (originServers.includes(serverName)) {
-        console.log(`${serverName} - Request denied: Origin server is the same`);
-        return res.json({ counter });
-    }
-
-    counter++;
-    res.json({ counter });
-
-    originServers.push(serverName);
-    const headers = { 'x-origin-servers': originServers.join(',') };
-
-    try {
-        await axios.post('http://localhost:3002/increment', null, { headers });
-    } catch (error) {
-        console.error(`${serverName} - Error forwarding request: `, error.message);
-    }
-});
-
-app.get('/count', (req, res) => {
-    res.send({ counter });
-});
-
-app.listen(3001, () => {
-    console.log('Server running on port 3001');
-});
+createServer(port, serverName, nextServerUrl, otherServers);
