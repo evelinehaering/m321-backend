@@ -1,4 +1,4 @@
-const createServer = require('./logic');
+const createServer = require('./server');
 
 const port = 3002;
 const serverName = 'server3';
