@@ -5,3 +5,4 @@ Was gewinnen wir mit dem commit-hook?
 Welche Probleme seht ihr mit dieser lösung?
     Wenn Commit-Hooks zu streng konfiguriert sind, können sie den Entwicklungsprozess unnötig verlangsamen.
     Commit-Hooks können lokal deaktiviert werden.
+    
