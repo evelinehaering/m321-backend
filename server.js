@@ -13,7 +13,6 @@ function createServer(port, serverName, nextServerUrl, otherServers) {
         if (req.method === 'OPTIONS') {
             return res.sendStatus(200);
         }
-
         next();
     });
 
