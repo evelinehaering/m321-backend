@@ -1,0 +1,15 @@
+#!/bin/sh
+
+commit_message=$(cat "$1")
+
+if ! grep -qE "se-[0-9]+$" <<< "$commit_message"; then
+    echo "Error: Commit message must end with a ticket number in the format 'se-<number>'."
+    echo "Example: 'Fixed bug in lighting automation se-1234'"
+    exit 1
+fi
+
+test "" = "$(grep '^Signed-off-by: ' "$1" |
+    sort | uniq -c | sed -e '/^[ 	]*1[ 	]/d')" || {
+    echo >&2 "Error: Duplicate Signed-off-by lines."
+    exit 1
+}
