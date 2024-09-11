@@ -1,0 +1,84 @@
+#!/usr/bin/env node
+
+const { execSync } = require('child_process');
+
+function getCurrentBranch() {
+    return execSync('git rev-parse --abbrev-ref HEAD').toString().trim();
+}
+
+function getLatestTag() {
+    try {
+        return execSync('git describe --tags --abbrev=0').toString().trim();
+    } catch (error) {
+        return null;
+    }
+}
+
+function getCommitMessagesSinceTag(tag) {
+    if(tag) {
+        return execSync(`git log ${tag}..HEAD --pretty=format:%s`).toString().trim().split('\n');
+    } else {
+        return execSync('git log --pretty=format:%s').toString().trim().split('\n');
+    }
+}
+
+function determineNextVersion(latestTag, commitMessages) {
+    let versionParts;
+
+    if(latestTag) {
+        latestTag = latestTag.replace(/^v/, '');
+        versionParts = latestTag.split('.').map(num => parseInt(num, 10));
+    } else {
+        versionParts = [0,0,0];
+    }
+
+    let major = versionParts[0];
+    let minor = versionParts[1];
+    let patch = versionParts[2];
+
+    let hasMinor = false;
+    let hasMajor = false;
+
+    commitMessages.forEach(message => {
+        if (message.startsWith('BREAKING CHANGE')) {
+            hasMajor = true;
+        } else if (message.startsWith('feat')) {
+            hasMinor = true;
+        }
+    });
+
+    if (hasMajor) {
+        major++;
+        minor = 0;
+        patch = 0;
+    } else if (hasMinor) {
+        minor++;
+        patch = 0;
+    } else {
+        patch++;
+    }
+
+    return `${major}.${minor}.${patch}`;
+}
+
+function tagNewVersion(version) {
+    execSync(`git tag ${version}`);
+    execSync('git push --tags');
+}
+
+function main() {
+    const branch = getCurrentBranch();
+    if (branch !== 'main') {
+        console.log('Not on main branch. Skipping tag.');
+        return;
+    }
+
+    const latestTag = getLatestTag();
+    const commitMessages = getCommitMessagesSinceTag(latestTag);
+    const newVersion = determineNextVersion(latestTag, commitMessages);
+
+    console.log(`New version: ${newVersion}`);
+    tagNewVersion(newVersion);
+}
+
+main();

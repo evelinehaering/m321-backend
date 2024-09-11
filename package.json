@@ -6,7 +6,8 @@
     "start": "npm-run-all --parallel start:server_1 start:server_2 start:server_3",
     "start:server_1": "node server_1.js",
     "start:server_2": "node server_2.js",
-    "start:server_3": "node server_3.js"
+    "start:server_3": "node server_3.js",
+    "setup:git-hooks": "git config core.hooksPath .git-hooks",     "postinstall": "npm run setup:git-hooks"
   },
   "author": "",
   "license": "ISC",
