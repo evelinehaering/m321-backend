@@ -8,7 +8,7 @@ describe('Counter Server', () => {
     const baseURL = `http://localhost:${port}`;
 
     beforeAll(() => {
-        const instance = createServer(port, []);
+        const instance = createServer(port, `server:${port}`, []);
         server = instance.server;
     });
 

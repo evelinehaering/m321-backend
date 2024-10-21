@@ -1,7 +1,7 @@
 const express = require('express');
 const axios = require('axios');
 
-function createServer(port, serverName, nextServerUrl, otherServers) {
+function createServer(port, serverName, otherServers) {
     const app = express();
     let counter = 0;
 
@@ -68,7 +68,7 @@ function createServer(port, serverName, nextServerUrl, otherServers) {
         originServers.push(serverName);
         const headers = { 'x-origin-servers': originServers.join(',') };
 
-        await forwardRequest(nextServerUrl, headers);
+        // await forwardRequest(nextServerUrl, headers);
     });
 
     app.get('/count', (req, res) => {
