@@ -3,8 +3,8 @@
 # Get the current branch name
 branch=$(git rev-parse --abbrev-ref HEAD)
 
-# Only tag on the master branch
-if [ "$branch" == "master" ]; then
+# Only tag on the main branch
+if [ "$branch" == "main" ]; then
   # Get the latest commit message
   commit_message=$(git log -1 --pretty=%B)
 
