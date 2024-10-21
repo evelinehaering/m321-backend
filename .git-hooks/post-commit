@@ -20,12 +20,12 @@ if [ "$branch" == "main" ]; then
     new_version=$(echo $latest_version | awk -F. '{print $1+1".0.0"}')
     echo "Major version bump to $new_version"
 
-  elif [[ $commit_message =~ ^[A-Z]{3}-[0-9]{4}:\ feat ]]; then
+  elif [[ $commit_message =~ ^[A-Z]{2}-[0-9]{4}:\ feat ]]; then
     # Minor version bump
     new_version=$(echo $latest_version | awk -F. '{print $1"."$2+1".0"}')
     echo "Minor version bump to $new_version"
 
-  elif [[ $commit_message =~ ^[A-Z]{3}-[0-9]{4}:\ (fix|chore|docs|style|refactor|perf|test) ]]; then
+  elif [[ $commit_message =~ ^[A-Z]{2}-[0-9]{4}:\ (fix|chore|docs|style|refactor|perf|test) ]]; then
     # Patch version bump
     new_version=$(echo $latest_version | awk -F. '{print $1"."$2"."$3+1}')
     echo "Patch version bump to $new_version"

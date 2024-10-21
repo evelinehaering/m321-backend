@@ -2,8 +2,8 @@
 
 commit_message=$(cat "$1")
 
-if ! grep -qE "se-[0-9]+$" <<< "$commit_message"; then
-    echo "Error: Commit message must end with a ticket number in the format 'se-<number>'."
+if ! grep -qE "^SE-[0-9]+" <<< "$commit_message"; then
+    echo "Error: Commit message must start with a ticket number in the format 'se-<number>'."
     echo "Example: 'Fixed bug in lighting automation se-1234'"
     exit 1
 fi
