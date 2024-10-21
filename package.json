@@ -9,6 +9,10 @@
     "start:server_3": "node server_3.js",
     "setup:git-hooks": "git config core.hooksPath .git-hooks",     "postinstall": "npm run setup:git-hooks"
   },
+  "ci:unit": "vitest",
+  "ci:e2e": "start-server-and-test preview http://localhost:4173 'cypress run --e2e'",
+   "ci:e2e:dev": "start-server-and-test 'vite dev --port 4173' http://localhost:4173 'cypress open --e2e'",
+   "ci:start-cypress": "vite dev --port 4173",
   "author": "",
   "license": "ISC",
   "description": "",

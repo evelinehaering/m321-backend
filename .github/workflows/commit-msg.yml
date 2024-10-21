@@ -1,0 +1,30 @@
+name: Commit Message Validation
+
+on:
+  push:
+    branches:
+      - '**'
+
+jobs:
+  commit-msg-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Validate Commit Message
+        run: |
+          TICKET_REGEX='^[A-Z]{3}-[0-9]{4}:'
+          CONVENTIONAL_COMMIT_REGEX='(feat|fix|chore|docs|style|refactor|perf|test|BREAKING CHANGE)(\(.*\))?: .{1,50}'
+          
+          COMMIT_MSG="${{ github.event.head_commit.message }}"
+
+          if ! echo "$COMMIT_MSG" | grep -Eq "$TICKET_REGEX"; then
+            echo "Error: Commit message does not start with a valid ticket number."
+            exit 1
+          fi
+
+          if ! echo "$COMMIT_MSG" | grep -Eq "$CONVENTIONAL_COMMIT_REGEX"; then
+            echo "Error: Commit message does not follow Conventional Commits format."
+            exit 1
+          fi
