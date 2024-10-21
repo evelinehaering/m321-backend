@@ -90,4 +90,7 @@ function createServer(port, serverName, otherServers) {
     });
 }
 
-module.exports = createServer;
+
+module.exports = { createServer };
+
+createServer(3000,process.env.OTHER_SERVERS?.split(',') || []);
